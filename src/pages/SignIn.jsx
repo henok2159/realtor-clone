@@ -50,12 +50,12 @@ export default function SignIn() {
                 id="password"
                 value={password}
               />
-              <button
+              <div
                 onClick={() => setShowPassword(!showPassword)}
                 className=" absolute right-4 top-3 text-xl"
               >
                 {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-              </button>
+              </div>
             </div>
             <div className="flex justify-between mb-3">
               <p>

@@ -3,8 +3,14 @@ import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Oath from "../component/Oath";
+import { db } from "../firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,6 +24,27 @@ export default function SignIn() {
     }));
   };
   const [showPassword, setShowPassword] = useState(false);
+  async function onSubmitHandler(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timeStamp = serverTimestamp();
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      navigate("/");
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
   return (
     <section className=" h-full">
       <h1 className="text-3xl font-bold text-center my-6  p-10 md:p-0">
@@ -33,7 +60,7 @@ export default function SignIn() {
         </div>
 
         <div className="w-full md:w-[67%] lg:w-[40%] lg:pl-10 ">
-          <form action="">
+          <form onSubmit={onSubmitHandler}>
             <input
               className=" mb-10 px-4 py-2 w-full border rounded-md transition ease-in-out focus: outline-blue-400"
               type="text"
@@ -59,12 +86,12 @@ export default function SignIn() {
                 id="password"
                 value={password}
               />
-              <button
+              <div
                 onClick={() => setShowPassword(!showPassword)}
                 className=" absolute right-4 top-3 text-xl"
               >
                 {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-              </button>
+              </div>
             </div>
             <div className="flex justify-between mb-3">
               <p>
@@ -86,7 +113,9 @@ export default function SignIn() {
               </p>
             </div>
             <button
-              className="w-full bg-blue-500 py-3 rounded text-white font-medium uppercase hover:bg-blue-600 active:bg-blue-700 transition duration-150 ease-in-out "
+              className="w-full bg-blue-500 py-3 rounded
+               text-white font-medium uppercase hover:bg-blue-600 
+               active:bg-blue-700 transition duration-150 ease-in-out "
               type="submit"
             >
               Sign up

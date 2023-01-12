@@ -12,7 +12,7 @@ export default function Header() {
   };
   return (
     <div className="border shadow-sm bg-white">
-      <header className="flex justify-between px-10 max-w-6xl mx-auto items-center">
+      <header className="flex justify-between max-w-6xl mx-auto items-center">
         <div>
           <img
             className=" cursor-pointer h-5"

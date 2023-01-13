@@ -27,7 +27,9 @@ export default function Oath() {
     <button
       type="button"
       onClick={googleSigninHandler}
-      className="w-full flex justify-center items-center bg-red-600 hover:bg-red-700 p-3 rounded shadow active:bg-red-800"
+      className="w-full flex justify-center items-center
+       bg-red-600 hover:bg-red-700 p-3 rounded shadow
+        active:bg-red-800"
     >
       <FcGoogle className="mr-4" />
       Continue with Google

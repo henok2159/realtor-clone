@@ -3,8 +3,12 @@ import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Oath from "../component/Oath";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,6 +21,22 @@ export default function SignIn() {
     }));
   };
   const [showPassword, setShowPassword] = useState(false);
+  async function signInwithEmailHandler(e) {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      if (userCredential.user) {
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error("invalid email or password");
+    }
+  }
   return (
     <section className=" h-full">
       <h1 className="text-3xl font-bold text-center my-6  p-10 md:p-0">
@@ -32,7 +52,7 @@ export default function SignIn() {
         </div>
 
         <div className="w-full md:w-[67%] lg:w-[40%] lg:pl-10 ">
-          <form action="">
+          <form onSubmit={signInwithEmailHandler}>
             <input
               className=" mb-10 px-4 py-2 w-full border rounded-md transition ease-in-out focus: outline-blue-400"
               type="text"

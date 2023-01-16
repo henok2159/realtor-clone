@@ -1,7 +1,21 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const auth = getAuth();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    });
+  }, [auth]);
   const location = useLocation();
   const navigate = useNavigate();
   const getLocation = (route) => {
@@ -42,13 +56,13 @@ export default function Header() {
               Offers
             </li>
             <li
-              onClick={() => navigate("/sign-in")}
+              onClick={() => navigate("/profile")}
               className={`cursor-pointer py-4 text-gray-400 font-semibold text-sm   ${
-                getLocation("/sign-in") &&
+                (getLocation("/sign-in") || getLocation("/profile")) &&
                 "border-b-[3px]  border-b-red-500 text-black"
               }`}
             >
-              Sign-in
+              {loggedIn ? "Profle" : "Sign-in"}
             </li>
           </ul>
         </div>

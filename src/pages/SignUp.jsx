@@ -4,7 +4,12 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Oath from "../component/Oath";
 import { db } from "../firebase";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateCurrentUser,
+  updateProfile,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -34,6 +39,9 @@ export default function SignIn() {
         password
       );
       const user = userCredential.user;
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
       const formDataCopy = { ...formData };
       delete formDataCopy.password;
       formDataCopy.timeStamp = serverTimestamp();

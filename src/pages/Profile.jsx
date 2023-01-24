@@ -1,8 +1,8 @@
-import { async } from "@firebase/util";
 import { getAuth, updateProfile } from "firebase/auth";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FcHome } from "react-icons/fc";
 
 export default function Profile() {
   const auth = getAuth();
@@ -76,6 +76,19 @@ export default function Profile() {
               >
                 sign out
               </p>
+            </div>
+            <div className="bg-blue-600 mt-6 rounded hover:bg-blue-700 active:bg-blue-900 text-center">
+              <button>
+                <Link
+                  to="/create-listing"
+                  className="flex p-3  justify-between items-center"
+                >
+                  <FcHome className="mr-3 bg-red-200 rounded-full text-3xl" />
+                  <p className=" uppercase text-sm font-medium text-white">
+                    sell or rent your home
+                  </p>
+                </Link>
+              </button>
             </div>
           </div>
         </div>

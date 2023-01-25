@@ -7,7 +7,6 @@ import { db } from "../firebase";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  updateCurrentUser,
   updateProfile,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";

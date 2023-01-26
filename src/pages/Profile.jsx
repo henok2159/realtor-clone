@@ -3,11 +3,16 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FcHome } from "react-icons/fc";
+import { useEffect } from "react";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { db } from "../firebase";
+import ListingComponent from "../component/listingComponent";
 
 export default function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
   const [canEdit, setcanEdit] = useState(false);
+  const [listing, setListing] = useState(null);
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
@@ -37,6 +42,27 @@ export default function Profile() {
       [e.target.id]: e.target.value,
     }));
   };
+  useEffect(() => {
+    async function loadListingFromFirebase() {
+      const q = query(
+        collection(db, "listings"),
+        where("userRef", "==", auth.currentUser.uid),
+        orderBy("timeStamp", "desc")
+      );
+      const querysnap = await getDocs(q);
+      // console.log(querysnap[0].data());
+      let listing = [];
+      querysnap.forEach((doc) => {
+        listing.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
+      console.log(listing[1]);
+      setListing(listing);
+    }
+    loadListingFromFirebase();
+  }, [auth.currentUser.uid]);
   return (
     <>
       <section>
@@ -91,6 +117,16 @@ export default function Profile() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="w-[90%]   mx-auto">
+        <h2 className="mx-auto uppercase font-semibold text-center my-6">
+          your Listings
+        </h2>
+        <div className="grid gap-4  sm:grid-cols-2   lg:grid-cols-3 2xl:grid-cols-4">
+          {listing?.map((item) => {
+            return <ListingComponent data={item.data} id={item.id} />;
+          })}
         </div>
       </section>
     </>

@@ -128,6 +128,7 @@ export default function CreateListing() {
     const formDataCopy = {
       ...formData,
       imageUrl: imageUrl,
+      userRef: auth.currentUser.uid,
       timeStamp: serverTimestamp(),
     };
     delete formDataCopy.image;
@@ -156,6 +157,7 @@ export default function CreateListing() {
           >
             Sell
           </button>
+
           <button
             type="button"
             className={`uppercase text-sm font-medium w-full px-7 py-3 shadow-sm rounded ${
@@ -168,6 +170,7 @@ export default function CreateListing() {
             Rent
           </button>
         </div>
+
         <div className="mt-6">
           <p className="p-2 font-semibold text-lg">Name</p>
           <input

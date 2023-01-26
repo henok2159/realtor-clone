@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ImLocation2 } from "react-icons/im";
+import { MdEdit, MdDelete } from "react-icons/md";
 import Moment from "react-moment";
 
 export default function listingComponent(props) {
@@ -16,9 +17,10 @@ export default function listingComponent(props) {
           loading="lazy"
           alt="home"
         />
-        <div className=" absolute top-2 left-2 text-white bg-blue-600 px-2 py-1 rounded-md">
+        <div className=" absolute top-2 left-2 text-sm font-semibold text-white bg-blue-600 px-2 py-1 rounded-md">
           <Moment fromNow>{props.data.timeStamp?.toDate()}</Moment>
         </div>
+
         <div className="mx-2">
           <p className="flex items-center font-light">
             <ImLocation2 className=" text-green-700 mr-1" />
@@ -56,6 +58,18 @@ export default function listingComponent(props) {
           </div>
         </div>
       </Link>
+      {props.onDelete && (
+        <div className="flex absolute bottom-2 right-2">
+          <MdEdit
+            className="mr-2 text-blue-700 cursor-pointer"
+            onClick={() => props.onEdit(props.id)}
+          />
+          <MdDelete
+            className="text-red-500 cursor-pointer"
+            onClick={() => props.onDelete(props.id)}
+          />
+        </div>
+      )}
     </li>
   );
 }

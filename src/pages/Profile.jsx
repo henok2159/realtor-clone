@@ -4,7 +4,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FcHome } from "react-icons/fc";
 import { useEffect } from "react";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import ListingComponent from "../component/listingComponent";
 
@@ -63,6 +71,22 @@ export default function Profile() {
     }
     loadListingFromFirebase();
   }, [auth.currentUser.uid]);
+  async function onDeleteHandler(listingId) {
+    if (window.confirm("Are you sure you want to delete this item")) {
+      deleteDoc(doc(db, "listings", listingId))
+        .then((_) => {
+          toast.success("listing item deleted successfully");
+        })
+        .catch((e) => {
+          toast.error("unable to delete the listing item");
+        });
+      const updateList = listing.filter((item) => item.id !== listingId);
+      setListing(updateList);
+    }
+  }
+  async function onEditHandler(listingId) {
+    navigate(`edit-listing/${listingId}`);
+  }
   return (
     <>
       <section>
@@ -119,13 +143,20 @@ export default function Profile() {
           </div>
         </div>
       </section>
-      <section className="w-[90%]   mx-auto">
+      <section className="w-[90%] mb-10  mx-auto">
         <h2 className="mx-auto uppercase font-semibold text-center my-6">
           your Listings
         </h2>
         <div className="grid gap-4  sm:grid-cols-2   lg:grid-cols-3 2xl:grid-cols-4">
           {listing?.map((item) => {
-            return <ListingComponent data={item.data} id={item.id} />;
+            return (
+              <ListingComponent
+                data={item.data}
+                id={item.id}
+                onDelete={onDeleteHandler}
+                onEdit={onEditHandler}
+              />
+            );
           })}
         </div>
       </section>

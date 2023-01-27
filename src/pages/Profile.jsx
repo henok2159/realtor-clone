@@ -70,7 +70,7 @@ export default function Profile() {
       setListing(listing);
     }
     loadListingFromFirebase();
-  }, [auth.currentUser.uid]);
+  }, [auth.currentUser.uid, navigate]);
   async function onDeleteHandler(listingId) {
     if (window.confirm("Are you sure you want to delete this item")) {
       deleteDoc(doc(db, "listings", listingId))
@@ -85,7 +85,7 @@ export default function Profile() {
     }
   }
   async function onEditHandler(listingId) {
-    navigate(`edit-listing/${listingId}`);
+    navigate(`/edit-listing/${listingId}`);
   }
   return (
     <>

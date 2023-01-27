@@ -53,7 +53,7 @@ export default function listingComponent(props) {
               {props.data.bed === 1 ? "1 bed" : `${props.data.bed} beds`}
             </p>
             <p>
-              {props.data.bath === 1 ? "1 bath" : `${props.data.bath} beds`}
+              {props.data.bath === 1 ? "1 bath" : `${props.data.bath} baths`}
             </p>
           </div>
         </div>

@@ -105,8 +105,8 @@ export default function Listing() {
           <p>link copied</p>
         </div>
       )}
-      <div className=" my-6 flex w-full max-w-6xl flex-col  md:flex-row mx-auto   rounded-md shadow-md  ">
-        <div className="flex flex-col flex-1  bg-white py-8 px-6">
+      <div className=" my-6 flex w-full max-w-6xl flex-col  md:flex-row  mx-auto   rounded-md shadow-md  ">
+        <div className="flex flex-col md:flex-1  bg-white py-8 px-6">
           <div className="flex">
             <h1 className="text-blue-900 text-xl mr-8 font-semibold">{`${listing.name}
           `}</h1>
@@ -193,7 +193,7 @@ export default function Listing() {
             </div>
           )}
         </div>
-        <div className="flex flex-1  w-full h-[400px] bg-white px-6 py-8 ">
+        <div className="flex md:flex-1  w-full h-[400px] bg-white px-6 py-8 overflow-x-hidden ">
           <MapContainer
             center={[listing.lattitude, listing.longitude]}
             zoom={13}

@@ -10,7 +10,10 @@ export default function listingComponent(props) {
       id={props.id}
       className="relative w-full list-none shadow hover:shadow-lg bg-white rounded overflow-hidden"
     >
-      <Link className=" " to="/">
+      <Link
+        className=" "
+        to={`/listing/catagory/${props.data.type}/${props.id}`}
+      >
         <img
           className=" h-52 w-full object-cover hover:scale-105 duration-200 ease-in"
           src={props.data.imageUrl[0]}

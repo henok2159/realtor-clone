@@ -19,14 +19,17 @@ import { MdLocationOn } from "react-icons/md";
 import { FaParking, FaBath } from "react-icons/fa";
 import { IoMdBed } from "react-icons/io";
 import { GiKitchenTap } from "react-icons/gi";
+import { getAuth } from "firebase/auth";
 
 export default function Listing() {
   const navigate = useNavigate();
   const [listing, setListing] = useState();
   const [loading, setLoading] = useState(true);
   const [showLinkCopy, setShowLinkCopy] = useState(false);
-  const [sendToLandLord, setSendToLandLord] = useState(true);
-
+  const [sendToLandLord, setSendToLandLord] = useState(false);
+  const [landLord, setLandlod] = useState();
+  const [message, setMessage] = useState("");
+  const auth = getAuth();
   const param = useParams();
   SwiperCore.use(Autoplay, Navigation, Pagination, EffectFade);
   useEffect(() => {
@@ -36,6 +39,10 @@ export default function Listing() {
       const ls = await getDoc(docRef);
       if (ls.exists()) {
         setListing(ls.data());
+        const Uref = ls.data().userRef;
+        const user = await getDoc(doc(db, "users", Uref));
+        setLandlod(user.data());
+        console.log(user.data());
       } else {
         navigate("/*");
         toast.error("it seems you lost");
@@ -51,7 +58,7 @@ export default function Listing() {
   return (
     <main>
       <Swiper
-        slidesPerView={2}
+        slidesPerView={1}
         spaceBetween={30}
         navigation={true}
         pagination={{ type: "progressbar" }}
@@ -76,7 +83,7 @@ export default function Listing() {
           navigator.clipboard.writeText(window.location.href);
           setTimeout(() => {
             setShowLinkCopy(false);
-          }, 2000);
+          }, 1500);
         }}
         className="flex z-10 bg-green-700 p-4 rounded-full fixed top-[10%] right-[10%] box-border active:bg-green-900 transition duration-200 ease-in-out"
       >
@@ -87,13 +94,15 @@ export default function Listing() {
           <p>link copied</p>
         </div>
       )}
-      <div className=" my-6 flex w-full max-w-6xl flex-col md:flex-row mx-auto  h-[500px] rounded-md shadow-md ">
+      <div className=" my-6 flex w-full max-w-6xl flex-col md:flex-row mx-auto   rounded-md shadow-md ">
         <div className="flex flex-col flex-1  bg-white py-8 px-6">
           <div className="flex">
-            <h1 className="text-blue-900 text-xl mr-4 font-semibold">{`${listing.name}
+            <h1 className="text-blue-900 text-xl mr-8 font-semibold">{`${listing.name}
           `}</h1>
-            <h1 className="text-blue-900 text-xl font-semibold">
-              {`${" -$"} ${new Intl.NumberFormat().format(listing.regularPrice)}
+            <h1 className="text-blue-900 text-xl">
+              {`${"Price: $"} ${new Intl.NumberFormat().format(
+                listing.regularPrice
+              )}
             ${listing.type === "rent" ? "/month" : ""}`}
             </h1>
           </div>
@@ -139,20 +148,37 @@ export default function Listing() {
               </p>
             </div>
           </div>
-          {sendToLandLord ? (
-            <div className="mt-6">
-              <p>{`contact ${"henok"} for ${listing.name}`}</p>
-              <textarea
-                className="border border-gray-400 w-full py-2 px-4 rounded h-[100px]"
-                placeholder="please your request"
-              ></textarea>
-              <div className="mt-6 uppercase px-6 py-3 bg-blue-600 text-center rounded shadow-md active:bg-blue-900 hover:bg-blue-800 cursor-pointer text-white">
-                send message
-              </div>
-            </div>
-          ) : (
-            <div className="mt-6 uppercase px-6 py-3 bg-blue-600 text-center rounded shadow-md active:bg-blue-900 hover:bg-blue-800 cursor-pointer text-white">
-              Contact LandLord
+          {listing.userRef !== auth.currentUser?.uid && (
+            <div>
+              {sendToLandLord ? (
+                <div className="mt-6">
+                  <p>{`contact ${landLord.name} for ${listing.name}`}</p>
+                  <textarea
+                    className="mt-2 border border-gray-400 w-full py-2 px-4 rounded h-[100px]"
+                    placeholder="please your request"
+                    value={message}
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                    }}
+                  ></textarea>
+                  <a
+                    href={`mailto:${landLord.email}?Subject=${listing.name}&body=${message}`}
+                  >
+                    <div className="mt-6 uppercase px-6 py-3 bg-blue-600 text-center rounded shadow-md active:bg-blue-900 hover:bg-blue-800 cursor-pointer text-white">
+                      send message
+                    </div>
+                  </a>
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    setSendToLandLord(true);
+                  }}
+                  className="mt-6 uppercase px-6 py-3 bg-blue-600 text-center rounded shadow-md active:bg-blue-900 hover:bg-blue-800 cursor-pointer text-white"
+                >
+                  Contact LandLord
+                </div>
+              )}
             </div>
           )}
         </div>

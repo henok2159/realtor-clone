@@ -20,6 +20,17 @@ import { FaParking, FaBath } from "react-icons/fa";
 import { IoMdBed } from "react-icons/io";
 import { GiKitchenTap } from "react-icons/gi";
 import { getAuth } from "firebase/auth";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
 
 export default function Listing() {
   const navigate = useNavigate();
@@ -94,7 +105,7 @@ export default function Listing() {
           <p>link copied</p>
         </div>
       )}
-      <div className=" my-6 flex w-full max-w-6xl flex-col md:flex-row mx-auto   rounded-md shadow-md ">
+      <div className=" my-6 flex w-full max-w-6xl flex-col  md:flex-row mx-auto   rounded-md shadow-md  ">
         <div className="flex flex-col flex-1  bg-white py-8 px-6">
           <div className="flex">
             <h1 className="text-blue-900 text-xl mr-8 font-semibold">{`${listing.name}
@@ -182,7 +193,22 @@ export default function Listing() {
             </div>
           )}
         </div>
-        <div className="flex flex-1 bg-white">mitku</div>
+        <div className="flex flex-1  w-full h-[400px] bg-white px-6 py-8 ">
+          <MapContainer
+            center={[listing.lattitude, listing.longitude]}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[listing.lattitude, listing.longitude]}>
+              <Popup>{` estimated location ${listing.name}`}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
       </div>
     </main>
   );

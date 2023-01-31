@@ -13,6 +13,7 @@ import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/editListing";
 import Listing from "./pages/listing";
 import ErrorPage from "./pages/errorPage";
+import SellORRent from "./pages/sellOrRent";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             path="/listing/catagory/:catagoryType/:listingId"
             element={<Listing />}
           />
+          <Route path="catagory/:catagoryType" element={<SellORRent />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>

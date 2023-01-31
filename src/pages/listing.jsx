@@ -81,8 +81,12 @@ export default function Listing() {
           return (
             <SwiperSlide key={index}>
               <div
-                className=" h-[400px] object-cover "
-                style={{ background: `url(${url}) center no-repeat` }}
+                className=" h-[400px] w-full overflow-hidden"
+                style={{
+                  background: `url(${url}) center no-repeat
+                  `,
+                  backgroundSize: "cover",
+                }}
               ></div>
             </SwiperSlide>
           );
@@ -105,7 +109,7 @@ export default function Listing() {
           <p>link copied</p>
         </div>
       )}
-      <div className=" my-6 flex w-full max-w-6xl flex-col  md:flex-row  mx-auto   rounded-md shadow-md  ">
+      <div className=" my-6 flex w-full max-w-6xl flex-col  md:flex-row  mx-auto bg-white  rounded-md shadow-md  ">
         <div className="flex flex-col md:flex-1  bg-white py-8 px-6">
           <div className="flex">
             <h1 className="text-blue-900 text-xl mr-8 font-semibold">{`${listing.name}
@@ -131,8 +135,8 @@ export default function Listing() {
               )} discount`}</div>
             )}
           </div>
-          <div className="flex mt-6">
-            <h3 className=" font-semibold mr-1">description - </h3>
+          <div className="flex mt-6 ">
+            <h3 className=" font-semibold mr-3 ">{"Description:"} </h3>
             <p>{listing.description}</p>
           </div>
           <div className="flex  font-semibold text-sm mt-6 gap-8 items-center flex-wrap">
@@ -193,7 +197,7 @@ export default function Listing() {
             </div>
           )}
         </div>
-        <div className="flex md:flex-1  w-full h-[400px] bg-white px-6 py-8 overflow-x-hidden ">
+        <div className="flex md:flex-1  w-full h-[400px]  px-6 py-8 overflow-x-hidden ">
           <MapContainer
             center={[listing.lattitude, listing.longitude]}
             zoom={13}

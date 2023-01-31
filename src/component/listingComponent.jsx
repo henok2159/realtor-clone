@@ -31,25 +31,13 @@ export default function listingComponent(props) {
           </p>
           <h2 className=" font-semibold truncate text-lg">{props.data.name}</h2>
           <p className=" text-red-800">
-            {props.data.offer ? (
-              <span className="flex justify-between items-center flex-wrap">
-                <p className="  flex ">
-                  $ {new Intl.NumberFormat().format(props.data.discountPrice)}
-                  {props.data.type === "rent" ? <p>/month</p> : null}
-                </p>
-                <p className=" line-through flex text-[#457b96]">
-                  $ {new Intl.NumberFormat().format(props.data.regularPrice)}
-                  {props.data.type === "rent" ? <p>/month</p> : null}
-                </p>
-              </span>
-            ) : (
-              <span>
-                <p className=" flex">
-                  $ {new Intl.NumberFormat().format(props.data.regularPrice)}
-                  {props.data.type === "rent" ? <p>/month</p> : null}
-                </p>
-              </span>
-            )}
+            {`$${
+              props.offer
+                ? new Intl.NumberFormat().format(
+                    props.data.discountPrice.regularPrice
+                  )
+                : new Intl.NumberFormat().format(props.data.regularPrice)
+            } ${props.data.type === "rent" ? " / Month" : ""}`}
           </p>
           <div className="flex  font-semibold text-sm">
             <p className="mr-4">

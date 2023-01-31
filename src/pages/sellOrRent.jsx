@@ -12,10 +12,12 @@ import {
 import { db } from "../firebase";
 import Spinner from "../component/spinner";
 import ListingComponent from "../component/listingComponent";
+import { useParams } from "react-router-dom";
 
-export default function Offers() {
+export default function SellORRent() {
+  const params = useParams();
   const [loading, setLoading] = useState(true);
-  const [offerList, setOfferList] = useState(null);
+  const [listing, setListing] = useState(null);
   const [lastFetch, setLastFetch] = useState(null);
   const [totalLength, setTotalLength] = useState(100000);
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function Offers() {
         const c = collection(db, "listings");
         const q = query(
           c,
-          where("offer", "==", true),
+          where("type", "==", params.catagoryType),
           orderBy("timeStamp", "desc"),
           limit(8)
         );
@@ -38,7 +40,7 @@ export default function Offers() {
         querySnap.forEach((doc) => {
           listing.push({ id: doc.id, data: doc.data() });
         });
-        setOfferList(listing);
+        setListing(listing);
       } catch (error) {
         console.log(error);
       }
@@ -46,13 +48,13 @@ export default function Offers() {
     }
 
     fetchListing();
-  }, []);
+  }, [params.catagoryType]);
   async function showMoreHandler() {
     try {
       const c = collection(db, "listings");
       const q = query(
         c,
-        where("offer", "==", true),
+        where("type", "==", params.catagoryType),
         orderBy("timeStamp", "desc"),
         startAfter(lastFetch),
         limit(8)
@@ -66,7 +68,7 @@ export default function Offers() {
       querySnap.forEach((doc) => {
         listing.push({ id: doc.id, data: doc.data() });
       });
-      setOfferList((prevState) => {
+      setListing((prevState) => {
         return [...prevState, ...listing];
       });
     } catch (error) {
@@ -77,15 +79,17 @@ export default function Offers() {
   if (loading) {
     return <Spinner />;
   }
-  return offerList && offerList.length > 0 ? (
+  return listing && listing.length > 0 ? (
     <div className="w-full p-3 max-w-6xl mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-6">Offers</h1>
+      <h1 className="text-3xl text-center font-semibold my-6">
+        {params.catagoryType === "rent" ? "House For Rent" : "House For Sell"}
+      </h1>
       <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {offerList.map(({ data, id }) => {
+        {listing.map(({ data, id }) => {
           return <ListingComponent data={data} id={id} />;
         })}
       </ul>
-      {lastFetch && +totalLength !== offerList?.length && (
+      {lastFetch && +totalLength !== listing?.length && (
         <div
           onClick={showMoreHandler}
           className="uppercase bg-white shadow-lg mx-auto max-w-max cursor-pointer my-6 px-4 py-2 hover: border hover:border-gray-800 active:bg-slate-200"

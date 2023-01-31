@@ -124,6 +124,7 @@ export default function CreateListing() {
       [...image].map((image) => storeImage(image))
     ).catch((error) => {
       toast.error("something happen " + error);
+      setLoading(false);
     });
     const formDataCopy = {
       ...formData,
@@ -135,7 +136,7 @@ export default function CreateListing() {
     delete formDataCopy.image;
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false);
-    navigate(`catagory/${formData.type}/${docRef.id}`);
+    navigate(`/profile`);
     toast.success(`${formData.type} house create successfully`);
   }
   if (loading) {

@@ -148,11 +148,10 @@ export default function EditListing() {
       formDataCopy
     );
     setLoading(false);
-    navigate(`catagory/${formData.type}/${param.listingId}`);
+    navigate(`/profile`);
     toast.success(`${formData.type} house edited successfully`);
   }
   const param = useParams("listingId");
-  console.log(param.listingId);
   useEffect(() => {
     if (listing && listing.userRef !== auth.currentUser.uid) {
       navigate("/");
@@ -348,6 +347,7 @@ export default function EditListing() {
             <input
               className="p-3 mt-1 text-center w-full border rounded border-gray-400 focus:border-slate-600 text-gray-700 text-lg"
               type="number"
+              step="any"
               min="-90"
               max="90"
               value={lattitude}
@@ -361,6 +361,7 @@ export default function EditListing() {
               className="p-3 mt-1 text-center w-full border rounded border-gray-400 focus:border-slate-600 text-gray-700 text-lg"
               type="number"
               min="-180"
+              step="any"
               max="180"
               value={longitude}
               id="longitude"

@@ -314,6 +314,7 @@ export default function CreateListing() {
               type="number"
               min="-90"
               max="90"
+              step="any"
               value={lattitude}
               id="lattitude"
               onChange={onChangeHandler}
@@ -324,6 +325,7 @@ export default function CreateListing() {
             <input
               className="p-3 mt-1 text-center w-full border rounded border-gray-400 focus:border-slate-600 text-gray-700 text-lg"
               type="number"
+              step="any"
               min="-180"
               max="180"
               value={longitude}
